@@ -1,0 +1,18 @@
+{
+  "files.exclude": {
+    "Client.class": true,
+    "FileInfoContent.class": true,
+    "AckPacketContent.class": true,
+    "GenerateFrame.class": true,
+    "Node.class": true,
+    "Node$Listener.class": true,
+    "PacketContent.class": true,
+    "RequestPacketContent.class": true,
+    "Server.class": true,
+    "Worker.class": true,
+    "java-example.iml": true,
+    "Dockerfile": true,
+    "FilePackets.class": true,
+    "TransferComplete.class": true
+  }
+}

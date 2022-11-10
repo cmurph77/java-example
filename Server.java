@@ -7,21 +7,14 @@ import java.net.InetSocketAddress;
 
 
 public class Server extends Node {
-	static final int DEFAULT_PORT = 54321;
-	static final int CLIENT_PORT = 5000;
-	static final String CLIENT_NODE = "client";
-	static final String WORKER_NODE = "worker";
+	static final int DEFAULT_PORT = 50000;
 
-	InetSocketAddress worker_addr;
-	InetSocketAddress client_addr;
 
 
 	
 	Server(int port) {
 		try {
-			socket= new DatagramSocket(port);
-			//worker_addr = new InetSocketAddress(WORKER_NODE, WORKER_PORT);
-			client_addr = new InetSocketAddress(CLIENT_NODE, CLIENT_PORT);
+			socket = new DatagramSocket(port);
 			listener.go();
 		}
 		catch(java.lang.Exception e) {e.printStackTrace();}
@@ -29,7 +22,6 @@ public class Server extends Node {
 
 	// Waiting here for contact.
 	public synchronized void start() throws Exception {
-			System.out.println("Waiting for contact");
 			this.wait();
 		}
 

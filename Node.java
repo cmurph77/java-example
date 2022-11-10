@@ -50,7 +50,6 @@ public abstract class Node {
 				while(true) {
 					DatagramPacket packet = new DatagramPacket(new byte[PACKETSIZE], PACKETSIZE);
 					socket.receive(packet);
-
 					onReceipt(packet);
 				}
 			} catch (Exception e) {if (!(e instanceof SocketException)) e.printStackTrace();}

@@ -3,24 +3,27 @@
  */
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
+import java.net.InetSocketAddress;
+
 
 /**
  *
- * Client class
+ * User class
  *
- * An instance accepts user input
+ * An instance accepts User input
  *
  */
-public class Client extends Node {
+public class User extends Node {
 	static final int DEFAULT_SRC_PORT = 54321;
-	static final String CLIENT_NODE = "client";
+	static final int SERVER_PORT = 50000;
+	static final String USER_NODE = "User";
 	
 
 	
 	/*
-	 * constructor for creating an new instance of a client and initializing the Inet Adresses
+	 * constructor for creating an new instance of a User and initializing the Inet Adresses
 	 */
-	Client(int srcPort) {
+	User(int srcPort) {
 		try {
 			socket = new DatagramSocket(srcPort);
 			listener.go();
@@ -29,11 +32,14 @@ public class Client extends Node {
 	}
 
 	/*
-	 * This method gets called to start up the Client Node and send a file request out.
+	 * This method gets called to start up the User Node and send a file request out.
 	 */
 	public synchronized void start() throws Exception {
-		DatagramPacket packet = new DatagramPacket(null, PACKETSIZE);
-		// InetSocketAddress addr = new InetSocketAddress(null, CLIENT_PORT);
+		FileInfoContent f = new FileInfoContent("hello",1);
+		DatagramPacket packet = f.toDatagramPacket();
+		InetSocketAddress serverAddr = new InetSocketAddress(DEFAULT_SRC_PORT);
+		packet.setSocketAddress(serverAddr);
+		socket.send(packet);
 		this.wait();
 	}
 
@@ -54,9 +60,8 @@ public class Client extends Node {
 	 * Sends a packet to a given address
 	 */
 	public static void main(String[] args) {
-		System.out.println("\n\nStarting Client Node...");
 		try {
-			(new Client(DEFAULT_SRC_PORT)).start();
+			(new User(DEFAULT_SRC_PORT)).start();
 			System.out.println("Program completed");
 		} catch(java.lang.Exception e) {e.printStackTrace();}
 	}

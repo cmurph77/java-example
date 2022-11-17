@@ -3,18 +3,17 @@
  */
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
+//import java.net.InetSocketAddress;
+import java.net.InetAddress;
 
 
 public class Server extends Node {
-	static final int DEFAULT_PORT = 50000;
+	static final int DEFAULT_PORT = 54321;
+	static final String SERVER_NODE = "user";
 
-
-
-	
-	Server(int port) {
+	Server(int srcPort) {
 		try {
-			socket = new DatagramSocket(port);
+			socket = new DatagramSocket(srcPort);
 			listener.go();
 		}
 		catch(java.lang.Exception e) {e.printStackTrace();}
@@ -22,8 +21,16 @@ public class Server extends Node {
 
 	// Waiting here for contact.
 	public synchronized void start() throws Exception {
-			this.wait();
-		}
+		String ipAddress = String.format("IP Address : %s\n", InetAddress.getLocalHost().toString());
+		System.out.println(ipAddress);
+		this.wait();
+	}
+
+	//@Override
+	public void onReceipt(DatagramPacket packet) {
+		System.out.println("Packet received");
+		this.notify();
+	}
 
 
 	public static void main(String[] args) {
@@ -34,9 +41,5 @@ public class Server extends Node {
 		} catch(java.lang.Exception e) {e.printStackTrace();}
 	}
 
-	@Override
-	public void onReceipt(DatagramPacket packet) {
-		System.out.println("Packet received");
-		
-	}
+	
 }

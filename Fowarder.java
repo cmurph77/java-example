@@ -20,10 +20,13 @@ public class Fowarder extends Node {
 	String controllerIP = "172.60.0.10";
 	ArrayList<Integer> connections = new ArrayList<>();
 	String ipAddr;
+	String ipAddresses;
+	int node;
 
-	Fowarder(int srcPort, String ipAddr) {
+	Fowarder(int srcPort, int node) {
 		try {
-			this.ipAddr = ipAddr;
+			this.node = node;
+			String[] ipAddresses = getConnections.getConnections(node);
 			socket = new DatagramSocket(srcPort);
 			listener.go();
 		}
@@ -35,19 +38,19 @@ public class Fowarder extends Node {
 	 * Node and send a file request out.
 	 */
 	public synchronized void start() throws Exception {
-		System.out.print("Node fowarding to ip" + ipAddr + "\n");
-		//String ipAddress = String.format("IP Address : %s\n", InetAddress.getLocalHost().toString());
-		//System.out.println(ipAddress);
+		System.out.println("This is node: " + node);
 		this.wait();
 	}
 
 	public synchronized void onReceipt(DatagramPacket packet) {
 		System.out.println("Packet Recieved");
-		fowardPacket(packet);
+		//TODO - HANDLE FOWARDING
+
+		//fowardPacket(packet,);
 		this.notify();
 	}
 
-	public void fowardPacket(DatagramPacket packet){
+	public void fowardPacket(DatagramPacket packet,String address){
 		System.out.println("\n Fowarding packet to IP:" + ipAddr + "\n");
 		try{
 			FileInfoContent f = new FileInfoContent("hello",1);
@@ -68,7 +71,8 @@ public class Fowarder extends Node {
 	public static void main(String[] args) {
 
 		try {
-			(new Fowarder(DEFAULT_PORT,args[0])).start();
+			int node = Integer.parseInt(args[0]);
+			(new Fowarder(DEFAULT_PORT,node)).start();
 			System.out.println("Program completed");
 		} catch(java.lang.Exception e) {e.printStackTrace();}
 	}

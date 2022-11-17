@@ -19,6 +19,7 @@ public abstract class PacketContent {
 	public static final int FILEINFO= 100;
 	public static final int COMPLETE_PACKET = 13;
 	public static final int FILEPACKET = 12;
+	public static final int MESSAGE_PACKET = 14;
 
 	int type= 0;
 

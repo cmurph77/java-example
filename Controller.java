@@ -51,7 +51,7 @@ public class Controller extends Node {
 
 	private void handleFlowReq(DatagramPacket packet) {
 		// TODO handle flow req in controller
-		PacketContent content= PacketContent.fromDatagramPacket(packet);
+		//PacketContent content= PacketContent.fromDatagramPacket(packet);
 		//int fromNode = content.getNode();
 		//String targetDestination = content.getTargetDestination();
 	}

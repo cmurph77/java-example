@@ -82,4 +82,9 @@ public class AckPacketContent extends PacketContent {
 	public int getNode() {
 		return 0;
 	}
+
+	@Override
+	public String getNextNodeIP() {
+		return null;
+	}
 }

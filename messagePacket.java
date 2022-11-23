@@ -82,4 +82,9 @@ public class messagePacket extends PacketContent {
 		return 0;
 	}
 
+	@Override
+	public String getNextNodeIP() {
+		return null;
+	}
+
 }

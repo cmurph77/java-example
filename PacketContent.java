@@ -129,5 +129,6 @@ public abstract class PacketContent {
 	public abstract Header getHeader();
 	public abstract String getTargetDestination();
 	public abstract int getNode();
+	public abstract String getNextNodeIP();
 
 }

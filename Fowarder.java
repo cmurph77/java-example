@@ -4,7 +4,6 @@
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
@@ -54,6 +53,7 @@ public class Fowarder extends Node {
 				handleFloMod(packet);
 				break; 
 			case PacketContent.MESSAGE_PACKET:
+
 				handleMessagePacket(packet);
 				break;
 			}
@@ -62,7 +62,6 @@ public class Fowarder extends Node {
 	}
 
 	private void handleMessagePacket(DatagramPacket packet) {
-		// TODO handle message packet
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
 		Header packetHeader = content.getHeader();
 		String packetDestinationGateWayIP = packetHeader.destinationGateWayIP;
@@ -74,8 +73,12 @@ public class Fowarder extends Node {
 		}
 		else {
 			sendFlowReq(packetDestinationGateWayIP);
-			// this.wait(); // wait here for flowmod packet to be recieved
-			// TODO - foward packet to next node. 
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} // wait here for flowmod packet to be recieved
+			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
 			
 
 		}
@@ -83,7 +86,6 @@ public class Fowarder extends Node {
 	}
 
 
-	// TODO - send flow request packet
 	private void sendFlowReq(String packetDestinationGateWayIP) {
 		FlowReq f = new FlowReq(packetDestinationGateWayIP,myNodeID);
 		DatagramPacket packet = f.toDatagramPacket();
@@ -108,12 +110,13 @@ public class Fowarder extends Node {
 		return false;
 	}
 
+	/*
+	 * This method handles a flow modification packet.
+	 */
 	private void handleFloMod(DatagramPacket packet) {
-		// TODO handle flow mod
-		// TODO foward packet to next node
-		// unpack flowmod packet.
-		// update routing table.
-		// this.notify
+		PacketContent content = PacketContent.fromDatagramPacket(packet);
+		routingTable.setRoute(content.getNextNodeIP(), content.getTargetDestination());		
+		this.notify();
 	}
 
 	public void fowardPacket(DatagramPacket packet,String ip){

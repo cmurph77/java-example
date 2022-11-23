@@ -63,6 +63,11 @@ public class FlowReq extends PacketContent {
 		return node;
 	}
 
+	@Override
+	public String getNextNodeIP() {
+		return null;
+	}
+
 
 }
 

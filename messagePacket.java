@@ -72,4 +72,14 @@ public class messagePacket extends PacketContent {
 		return header;
 	}
 
+	@Override
+	public String getTargetDestination() {
+		return null;
+	}
+
+	@Override
+	public int getNode() {
+		return 0;
+	}
+
 }

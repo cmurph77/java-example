@@ -72,4 +72,14 @@ public class AckPacketContent extends PacketContent {
 	public Header getHeader() {
 		return null;
 	}
+
+	@Override
+	public String getTargetDestination() {
+		return null;
+	}
+
+	@Override
+	public int getNode() {
+		return 0;
+	}
 }

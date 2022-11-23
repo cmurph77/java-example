@@ -19,6 +19,7 @@ public class Controller extends Node {
         "172.60.0.6", // node 6
         "172.60.0.7", // node 7
     };
+	 RoutingTable table;
 
 	Controller(int srcPort) {
 		try {
@@ -34,12 +35,31 @@ public class Controller extends Node {
 		this.wait();
 	}
 
-	//@Override
-	public void onReceipt(DatagramPacket packet) {
-		System.out.println("Packet received");
-		this.notify();
+	public synchronized void onReceipt(DatagramPacket packet) {
+		System.out.println("Packet Recieved");
+		PacketContent content= PacketContent.fromDatagramPacket(packet);
+		// divert incoming packets to their respective handlers
+		switch(content.getType()){
+			case PacketContent.FlOW_REQ:
+				handleFlowReq(packet);
+				break; 
+			}
+
+		//this.notify();
 	}
 
+
+	private void handleFlowReq(DatagramPacket packet) {
+		// TODO handle flow req in controller
+		PacketContent content= PacketContent.fromDatagramPacket(packet);
+		//int fromNode = content.getNode();
+		//String targetDestination = content.getTargetDestination();
+	}
+
+	public void setUpRoutingTable(){
+		// TODO -controller routing table 
+		
+	}
 
 	public static void main(String[] args) {
 		System.out.println("\n\nStarting Controller Node...");

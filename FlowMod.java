@@ -55,13 +55,18 @@ public class FlowMod extends PacketContent {
 
 	@Override
 	public String toString() {
-		// TODO flow mod to string
-		return null;
+		String output = "FLOWMODE: SEND TO IP-> " + nextNodeIP + " TO GET TO IP-> " + targetDestination;
+		return output;
 	}
 
 	@Override
 	public Header getHeader() {
 		return null;
+	}
+
+	@Override
+	public int getNode() {
+		return 0;
 	}
 
 

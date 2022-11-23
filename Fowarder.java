@@ -4,6 +4,8 @@
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 
@@ -63,24 +65,39 @@ public class Fowarder extends Node {
 		// TODO handle message packet
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
 		Header packetHeader = content.getHeader();
-	// check if message is meant for this node if so foward to subnet ip //TODO add subnet to header
 		String packetDestinationGateWayIP = packetHeader.destinationGateWayIP;
-		if(packetAtRightNode(packetDestinationGateWayIP)){
+		if(packetAtRightNode(packetDestinationGateWayIP)){ //checking if packet is at the right fowarder, if so send to subnet
 			fowardPacket(packet, packetHeader.destinationSubnetIP);
 		}
 		else if(routingTable.routeExists(packetDestinationGateWayIP)){
 			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
 		}
 		else {
-			// TODO - send flow request packet
+			sendFlowReq(packetDestinationGateWayIP);
 			// this.wait(); // wait here for flowmod packet to be recieved
 			// TODO - foward packet to next node. 
+			
 
 		}
 		
 	}
 
 
+	// TODO - send flow request packet
+	private void sendFlowReq(String packetDestinationGateWayIP) {
+		FlowReq f = new FlowReq(packetDestinationGateWayIP,myNodeID);
+		DatagramPacket packet = f.toDatagramPacket();
+		InetAddress addr;
+		try {
+			addr = InetAddress.getByName(controllerIP);
+			InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
+			packet.setSocketAddress(socket_addr);
+			socket.send(packet);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private boolean packetAtRightNode(String ip){
 		for(int i = 0;i<myPublicIPs.size();i++){
@@ -92,7 +109,8 @@ public class Fowarder extends Node {
 	}
 
 	private void handleFloMod(DatagramPacket packet) {
-		// TODO handle flow mode
+		// TODO handle flow mod
+		// TODO foward packet to next node
 		// unpack flowmod packet.
 		// update routing table.
 		// this.notify

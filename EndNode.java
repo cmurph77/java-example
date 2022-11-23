@@ -17,7 +17,7 @@ public class EndNode extends Node {
 	static final String EndNode_NODE = "EndNode";
 	String myGateWayIp;
 	String mySubnetIP;
-	String testDesGateWayIP = "0.0.0.0";  //TODO - set test end ponint ip addresses
+	String testDesGateWayIP = "0.0.0.0"; 
 	String testDesSubnetIP = "0.0.0.0";
 
 	EndNode(int srcPort, String mySubnetIP,String myGateWayIp ) {

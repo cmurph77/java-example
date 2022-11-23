@@ -11,8 +11,16 @@
     "Server.class": true,
     "Worker.class": true,
     "java-example.iml": true,
-    "Dockerfile": true,
+    "Dockerfile": false,
     "FilePackets.class": true,
-    "TransferComplete.class": true
+    "TransferComplete.class": true,
+    "testClass.class": true,
+    "getConnections.class": true,
+    "Fowarder.class": true,
+    "Controller.class": true,
+    "Header.class": true,
+    "script.sh": true,
+    "startup.sh": true,
+    "User.class": true
   }
 }

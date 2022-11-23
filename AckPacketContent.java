@@ -67,4 +67,9 @@ public class AckPacketContent extends PacketContent {
 	public String getPacketInfo() {
 		return info;
 	}
+
+	@Override
+	public Header getHeader() {
+		return null;
+	}
 }

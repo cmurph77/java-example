@@ -1,9 +1,3 @@
-/*
- * @author sweber
- * 
- * This class was provided in the java example 
- */
-
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -11,31 +5,34 @@ import java.io.ObjectOutputStream;
  * Class for packet content that represents file information
  *
  */
-public class FileInfoContent extends PacketContent {
+public class messagePacket extends PacketContent {
 
-	String filename;
-	int size;
+	String message;
+	Header header;
 
 	/**
 	 * Constructor that takes in information about a file.
-	 * @param filename Initial filename.
-	 * @param size Size of filename.
+	 * @param message Initial message.
+	 * @param size Size of message.
 	 */
-	FileInfoContent(String filename, int size) {
-		type= FILEINFO;
-		this.filename = filename;
-		this.size= size;
+	messagePacket(String message) {
+		this.message = message;
 	}
+
+	public void setHeader( String senderSubNetIP,String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP){
+		header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
+	}
+
+
 
 	/**
 	 * Constructs an object out of a datagram packet.
 	 * @param packet Packet that contains information about a file.
 	 */
-	protected FileInfoContent(ObjectInputStream oin) {
+	protected messagePacket(ObjectInputStream oin) {
 		try {
-			type= FILEINFO;
-			filename= oin.readUTF();
-			size= oin.readInt();
+			type= MESSAGE_PACKET;
+			message= oin.readUTF();
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -46,8 +43,7 @@ public class FileInfoContent extends PacketContent {
 	 */
 	protected void toObjectOutputStream(ObjectOutputStream oout) {
 		try {
-			oout.writeUTF(filename);
-			oout.writeInt(size);
+			oout.writeUTF(message);
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -59,7 +55,7 @@ public class FileInfoContent extends PacketContent {
 	 * @return Returns the content of the packet as String.
 	 */
 	public String toString() {
-		return "Filename: " + filename + " - Size: " + size;
+		return "message: " + message;
 	}
 
 	/**
@@ -67,16 +63,13 @@ public class FileInfoContent extends PacketContent {
 	 *
 	 * @return Returns the file name contained in the packet.
 	 */
-	public String getFileName() {
-		return filename;
+	public String getmessage() {
+		return message;
 	}
 
-	/**
-	 * Returns the file size contained in the packet.
-	 *
-	 * @return Returns the file size contained in the packet.
-	 */
-	public int getFileSize() {
-		return size;
+	@Override
+	public Header getHeader() {
+		return header;
 	}
+
 }

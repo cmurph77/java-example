@@ -8,20 +8,22 @@ import java.io.ObjectOutputStream;
 public class messagePacket extends PacketContent {
 
 	String message;
-	int size;
-    String[] header;
+	Header header;
 
 	/**
 	 * Constructor that takes in information about a file.
 	 * @param message Initial message.
 	 * @param size Size of message.
 	 */
-	messagePacket(String message, int size) {
-		type= MESSAGE_PACKET;
+	messagePacket(String message) {
 		this.message = message;
-		this.size= size;
-        
 	}
+
+	public void setHeader( String senderSubNetIP,String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP){
+		header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
+	}
+
+
 
 	/**
 	 * Constructs an object out of a datagram packet.
@@ -31,7 +33,6 @@ public class messagePacket extends PacketContent {
 		try {
 			type= MESSAGE_PACKET;
 			message= oin.readUTF();
-			size= oin.readInt();
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -43,7 +44,6 @@ public class messagePacket extends PacketContent {
 	protected void toObjectOutputStream(ObjectOutputStream oout) {
 		try {
 			oout.writeUTF(message);
-			oout.writeInt(size);
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -67,12 +67,9 @@ public class messagePacket extends PacketContent {
 		return message;
 	}
 
-	/**
-	 * Returns the file size contained in the packet.
-	 *
-	 * @return Returns the file size contained in the packet.
-	 */
-	public int getFileSize() {
-		return size;
+	@Override
+	public Header getHeader() {
+		return header;
 	}
+
 }

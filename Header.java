@@ -1,8 +1,62 @@
+import java.util.ArrayList;
+
 public class Header {
+    
+    ArrayList<Integer> nodesOnRoute;
+    // messagepacket header
+    String senderSubNetIP;
+    String senderGatewayIP;
+    String destinationGateWayIP;
+    String destinationSubnetIP;
 
-    Header(){
 
+    public String getSenderSubNetIP() {
+        return senderSubNetIP;
     }
-    String destination;
+
+
+
+
+    public String getSenderGatewayIP() {
+        return senderGatewayIP;
+    }
+
+
+
+
+    public String getDestinationGateWayIP() {
+        return destinationGateWayIP;
+    }
+
+
+
+
+    public String getDestinationSubnetIP() {
+        return destinationSubnetIP;
+    }
+
+
+
+
+    // this is a header for a message packet
+    public Header(String senderSubNetIP, String senderGatewayIP, String destinationGateWayIP,String destinationSubnetIP) {
+        this.senderSubNetIP = senderSubNetIP;
+        this.senderGatewayIP = senderGatewayIP;
+        this.destinationGateWayIP = destinationGateWayIP;
+        this.destinationSubnetIP = destinationSubnetIP;
+    }
+
+
+
+
+    public void addNode(int node){
+        nodesOnRoute.add(node);
+    }
+
+    public ArrayList<Integer> getRouteTaken() {
+        return nodesOnRoute;
+    }
+
+
     
 }

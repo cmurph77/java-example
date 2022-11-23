@@ -16,6 +16,11 @@
     "TransferComplete.class": true,
     "testClass.class": true,
     "getConnections.class": true,
-    "Fowarder.class": true
+    "Fowarder.class": true,
+    "Controller.class": true,
+    "Header.class": true,
+    "script.sh": true,
+    "startup.sh": true,
+    "User.class": true
   }
 }

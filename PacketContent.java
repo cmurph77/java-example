@@ -15,11 +15,11 @@ import java.io.ObjectOutputStream;
 public abstract class PacketContent {
 
 	public static final int ACKPACKET= 10;
-	public static final int REQPACKET= 11;
-	public static final int FILEINFO= 100;
-	public static final int COMPLETE_PACKET = 13;
-	public static final int FILEPACKET = 12;
 	public static final int MESSAGE_PACKET = 14;
+	public static final int FlOW_MOD = 15;
+	public static final int FlOW_REQ = 16;
+
+	
 
 	int type= 0;
 
@@ -47,17 +47,14 @@ public abstract class PacketContent {
 			case ACKPACKET:
 				content= new AckPacketContent(oin);
 				break;
-			case FILEINFO:
-				content= new FileInfoContent(oin);
+			case FlOW_MOD:
+				content= new FlowMod(oin);
 				break;
-			case REQPACKET:
-				content= new RequestPacketContent(oin);
+			case FlOW_REQ:
+				content= new FlowReq(oin);
 				break;
-			case FILEPACKET:
-				content= new FilePackets(oin);
-				break;
-			case COMPLETE_PACKET:
-				content= new TransferComplete(oin);
+			case MESSAGE_PACKET:
+				content= new messagePacket(oin);
 				break;
 			default:
 				content= null;
@@ -119,6 +116,7 @@ public abstract class PacketContent {
 	 */
 	public abstract String toString();
 
+
 	/**
 	 * Returns the type of the packet.
 	 *
@@ -127,5 +125,7 @@ public abstract class PacketContent {
 	public int getType() {
 		return type;
 	}
+
+	public abstract Header getHeader();
 
 }

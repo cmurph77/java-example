@@ -74,12 +74,8 @@ public class Fowarder extends Node {
 		else {
 			System.out.println("Sending flow req packet");
 			sendFlowReq(packetDestinationGateWayIP);
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} // wait here for flowmod packet to be recieved
-			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
+			// TODO Figure out how to foward packet
+			//fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
 			
 
 		}

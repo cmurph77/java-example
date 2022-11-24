@@ -51,7 +51,7 @@ public class getConnections {
             Scanner scanner = new Scanner(connections)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] tuple = line.split("->"); // isolates the node number from its addresses
+                String[] tuple = line.split("=>"); // isolates the node number from its addresses
                 int currentNode = Integer.parseInt(tuple[0]);
                 if(currentNode == node){
                     String[] ipAddresses = tuple[1].split(",");

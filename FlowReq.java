@@ -9,15 +9,17 @@ import java.io.ObjectOutputStream;
 
 public class FlowReq extends PacketContent {
 
-	String targetDestination;    // this is the destination for the packet
+	String targetDestination;    // this is the destination for the packet\
+	int node;
 
 
 	public String getTargetDestination() {
 		return targetDestination;
 	}
 
-	public FlowReq(String targetDestination) {
+	public FlowReq(String targetDestination, int node) {
 		this.targetDestination = targetDestination;
+		this.node = node;
 		type= FlOW_REQ;
 	}
 
@@ -29,6 +31,7 @@ public class FlowReq extends PacketContent {
 		try {
 			type= FlOW_REQ;
 			targetDestination= oin.readUTF();
+			node = oin.readInt();
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -40,19 +43,28 @@ public class FlowReq extends PacketContent {
 	protected void toObjectOutputStream(ObjectOutputStream oout) {
 		try {
 			oout.writeUTF(targetDestination);
+			oout.writeInt(node);
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
 
 	@Override
 	public String toString() {
-		// TODO flow mod to string
-		return null;
+		return targetDestination;
 	}
 
 	@Override
 	public Header getHeader() {
-		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getNode() {
+		return node;
+	}
+
+	@Override
+	public String getNextNodeIP() {
 		return null;
 	}
 

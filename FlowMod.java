@@ -11,8 +11,16 @@ public class FlowMod extends PacketContent {
 
 	String targetDestination;    // this is the destination for the packet
 	String nextNodeIP;           // this is the next ip address the fowarder must foward to.
-
+	int nodeID;
 	
+
+	public int getNodeID() {
+		return nodeID;
+	}
+
+	public void setNodeID(int nodeID) {
+		this.nodeID = nodeID;
+	}
 
 	public String getTargetDestination() {
 		return targetDestination;
@@ -37,6 +45,8 @@ public class FlowMod extends PacketContent {
 			type= FlOW_MOD;
 			targetDestination= oin.readUTF();
 			nextNodeIP= oin.readUTF();
+			nodeID = oin.readInt();
+
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -49,19 +59,25 @@ public class FlowMod extends PacketContent {
 		try {
 			oout.writeUTF(targetDestination);
 			oout.writeUTF(nextNodeIP);
+			oout.writeInt(nodeID);
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
 
 	@Override
 	public String toString() {
-		// TODO flow mod to string
-		return null;
+		String output = "FLOWMODE: SEND TO IP-> " + nextNodeIP + " TO GET TO IP-> " + targetDestination;
+		return output;
 	}
 
 	@Override
 	public Header getHeader() {
 		return null;
+	}
+
+	@Override
+	public int getNode() {
+		return 0;
 	}
 
 

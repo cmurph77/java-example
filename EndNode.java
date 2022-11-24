@@ -17,12 +17,14 @@ public class EndNode extends Node {
 	static final String EndNode_NODE = "EndNode";
 	String myGateWayIp;
 	String mySubnetIP;
-	String testDesGateWayIP = "0.0.0.0";  //TODO - set test end ponint ip addresses
-	String testDesSubnetIP = "0.0.0.0";
+	String testDesGateWayIP = "172.2.0.4"; 
+	String testDesSubnetIP = "181.200.0.1";
 
 	EndNode(int srcPort, String mySubnetIP,String myGateWayIp ) {
 		this.myGateWayIp = myGateWayIp;
 		this.mySubnetIP = mySubnetIP;
+		testDesGateWayIP = "172.2.0.4"; 
+		testDesSubnetIP = "181.200.0.1";
 		try {
 			socket = new DatagramSocket(srcPort);
 			listener.go();
@@ -42,6 +44,7 @@ public class EndNode extends Node {
 	public void sendMessagePacket(String messageToSend,String ip) throws IOException{
 		messagePacket m = new messagePacket(messageToSend);
 		m.setHeader(mySubnetIP, myGateWayIp, testDesGateWayIP, testDesSubnetIP);
+		m.getHeader().printHeader();
 		DatagramPacket packet = m.toDatagramPacket();
 		// setting the address
 		InetAddress addr = InetAddress.getByName(ip);
@@ -54,6 +57,7 @@ public class EndNode extends Node {
 	public void sendMessagePacket(String ip) throws IOException{
 		messagePacket m = new messagePacket("Hello from EndNode with ip address:  " + mySubnetIP);
 		m.setHeader(mySubnetIP, myGateWayIp, testDesGateWayIP, testDesSubnetIP);
+		//m.getHeader().printHeader();
 		DatagramPacket packet = m.toDatagramPacket();
 		// setting the address
 		InetAddress addr = InetAddress.getByName(ip);

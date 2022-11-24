@@ -4,6 +4,7 @@
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 
@@ -60,27 +61,47 @@ public class Fowarder extends Node {
 	}
 
 	private void handleMessagePacket(DatagramPacket packet) {
-		// TODO handle message packet
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
 		Header packetHeader = content.getHeader();
-	// check if message is meant for this node if so foward to subnet ip //TODO add subnet to header
+		//packetHeader.printHeader();
 		String packetDestinationGateWayIP = packetHeader.destinationGateWayIP;
-		if(packetAtRightNode(packetDestinationGateWayIP)){
+		if(packetAtRightNode(packetDestinationGateWayIP)){ //checking if packet is at the right fowarder, if so send to subnet
 			fowardPacket(packet, packetHeader.destinationSubnetIP);
 		}
 		else if(routingTable.routeExists(packetDestinationGateWayIP)){
 			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
 		}
 		else {
-			// TODO - send flow request packet
-			// this.wait(); // wait here for flowmod packet to be recieved
-			// TODO - foward packet to next node. 
+			System.out.println("Sending flow req packet");
+			sendFlowReq(packetDestinationGateWayIP);
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} // wait here for flowmod packet to be recieved
+			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
+			
 
 		}
 		
 	}
 
 
+	private void sendFlowReq(String packetDestinationGateWayIP) {
+		FlowReq f = new FlowReq(packetDestinationGateWayIP,myNodeID);
+		DatagramPacket packet = f.toDatagramPacket();
+		InetAddress addr;
+		try {
+			addr = InetAddress.getByName(controllerIP);
+			InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
+			packet.setSocketAddress(socket_addr);
+			socket.send(packet);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Flow request sent");
+	}
 
 	private boolean packetAtRightNode(String ip){
 		for(int i = 0;i<myPublicIPs.size();i++){
@@ -91,11 +112,14 @@ public class Fowarder extends Node {
 		return false;
 	}
 
+	/*
+	 * This method handles a flow modification packet.
+	 */
 	private void handleFloMod(DatagramPacket packet) {
-		// TODO handle flow mode
-		// unpack flowmod packet.
-		// update routing table.
-		// this.notify
+		System.out.println("flowmod recieved");
+		PacketContent content = PacketContent.fromDatagramPacket(packet);
+		routingTable.setRoute(content.getNextNodeIP(), content.getTargetDestination());		
+		this.notify();
 	}
 
 	public void fowardPacket(DatagramPacket packet,String ip){

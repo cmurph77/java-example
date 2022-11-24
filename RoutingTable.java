@@ -20,4 +20,10 @@ public class RoutingTable {
     public String getRoute(String destinationIP){
         return table.get(destinationIP);
     }
+
+    public void printTable(){
+        System.out.println(table.toString());
+
+        
+    }
 }

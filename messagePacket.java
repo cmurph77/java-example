@@ -17,6 +17,7 @@ public class messagePacket extends PacketContent {
 	 */
 	messagePacket(String message) {
 		this.message = message;
+		type= MESSAGE_PACKET;
 	}
 
 	public void setHeader( String senderSubNetIP,String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP){
@@ -33,6 +34,12 @@ public class messagePacket extends PacketContent {
 		try {
 			type= MESSAGE_PACKET;
 			message= oin.readUTF();
+			String destinationGateWayIP = oin.readUTF();
+    		String destinationSubnetIP = oin.readUTF();
+			String senderSubNetIP = oin.readUTF();
+    		String senderGatewayIP = oin.readUTF();
+			header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
+    		
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -44,6 +51,12 @@ public class messagePacket extends PacketContent {
 	protected void toObjectOutputStream(ObjectOutputStream oout) {
 		try {
 			oout.writeUTF(message);
+			oout.writeUTF(header.getDestinationGateWayIP());
+			oout.writeUTF(header.getDestinationSubnetIP());
+			oout.writeUTF(header.getSenderSubNetIP());
+			oout.writeUTF(header.getSenderGatewayIP());
+
+
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -70,6 +83,21 @@ public class messagePacket extends PacketContent {
 	@Override
 	public Header getHeader() {
 		return header;
+	}
+
+	@Override
+	public String getTargetDestination() {
+		return null;
+	}
+
+	@Override
+	public int getNode() {
+		return 0;
+	}
+
+	@Override
+	public String getNextNodeIP() {
+		return null;
 	}
 
 }

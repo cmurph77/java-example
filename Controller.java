@@ -39,7 +39,6 @@ public class Controller extends Node {
 
 	// Waiting here for contact.
 	public synchronized void start() throws Exception {
-		System.out.println(Arrays.toString(fowardersAddresses));
 		setUpRoutingTable();
 		this.wait();
 	}

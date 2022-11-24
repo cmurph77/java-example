@@ -1,10 +1,17 @@
 /*
  * @author cianmurphy
  */
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
 //import java.net.InetSocketAddress;
 import java.util.Arrays;
+import java.util.HashMap;
+
+
 
 
 public class Controller extends Node {
@@ -19,7 +26,8 @@ public class Controller extends Node {
         "172.60.0.6", // node 6
         "172.60.0.7", // node 7
     };
-	 RoutingTable table;
+	int nodeCount = 6;
+	 HashMap<Integer,RoutingTable> controllerTable;
 
 	Controller(int srcPort) {
 		try {
@@ -50,15 +58,50 @@ public class Controller extends Node {
 
 
 	private void handleFlowReq(DatagramPacket packet) {
-		// TODO handle flow req in controller
-		//PacketContent content= PacketContent.fromDatagramPacket(packet);
-		//int fromNode = content.getNode();
-		//String targetDestination = content.getTargetDestination();
+		PacketContent content= PacketContent.fromDatagramPacket(packet);
+		int fromNode = content.getNode();
+		String targetDestination = content.getTargetDestination();
+		RoutingTable r = controllerTable.get(fromNode);
+		String nextIP = r.getRoute(targetDestination);
+		sendFlowMod(fromNode, nextIP, targetDestination);
+
 	}
 
+	public void sendFlowMod(int toNode, String nextIP, String targetDestination){
+		FlowMod f = new FlowMod(targetDestination,nextIP);
+		DatagramPacket packet = f.toDatagramPacket();
+		InetAddress addr;
+		try {
+			addr = InetAddress.getByName(fowardersAddresses[toNode]);
+			InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
+			packet.setSocketAddress(socket_addr);
+			socket.send(packet);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	public void setUpRoutingTable(){
-		// TODO -controller routing table 
-		
+		RoutingTable r;
+		controllerTable.put(2,(new RoutingTable()));
+		// node 3
+		r = new RoutingTable();
+		r.setRoute("172.2.0.4", "172.2.0.4");
+		controllerTable.put(3,r);
+		//node 4
+		controllerTable.put(4,(new RoutingTable()));
+		controllerTable.put(5,(new RoutingTable()));
+		controllerTable.put(6,(new RoutingTable()));
+		//node 7
+		r = new RoutingTable();
+		r.setRoute("172.1.0.3", "172.2.0.1");
+		controllerTable.put(7,r);
+	}
+
+	public void populateTable(){
+
 	}
 
 	public static void main(String[] args) {

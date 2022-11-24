@@ -53,7 +53,6 @@ public class Fowarder extends Node {
 				handleFloMod(packet);
 				break; 
 			case PacketContent.MESSAGE_PACKET:
-
 				handleMessagePacket(packet);
 				break;
 			}

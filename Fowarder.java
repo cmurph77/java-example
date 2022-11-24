@@ -63,6 +63,7 @@ public class Fowarder extends Node {
 	private void handleMessagePacket(DatagramPacket packet) {
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
 		Header packetHeader = content.getHeader();
+		//packetHeader.printHeader();
 		String packetDestinationGateWayIP = packetHeader.destinationGateWayIP;
 		if(packetAtRightNode(packetDestinationGateWayIP)){ //checking if packet is at the right fowarder, if so send to subnet
 			fowardPacket(packet, packetHeader.destinationSubnetIP);
@@ -71,6 +72,7 @@ public class Fowarder extends Node {
 			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
 		}
 		else {
+			System.out.println("Sending flow req packet");
 			sendFlowReq(packetDestinationGateWayIP);
 			try {
 				this.wait();
@@ -98,6 +100,7 @@ public class Fowarder extends Node {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Flow request sent");
 	}
 
 	private boolean packetAtRightNode(String ip){
@@ -113,6 +116,7 @@ public class Fowarder extends Node {
 	 * This method handles a flow modification packet.
 	 */
 	private void handleFloMod(DatagramPacket packet) {
+		System.out.println("flowmod recieved");
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
 		routingTable.setRoute(content.getNextNodeIP(), content.getTargetDestination());		
 		this.notify();

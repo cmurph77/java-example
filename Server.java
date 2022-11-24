@@ -21,8 +21,7 @@ public class Server extends Node {
 
 	// Waiting here for contact.
 	public synchronized void start() throws Exception {
-		String ipAddress = String.format("IP Address : %s\n", InetAddress.getLocalHost().toString());
-		System.out.println(ipAddress);
+		
 		this.wait();
 	}
 

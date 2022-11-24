@@ -40,6 +40,7 @@ public class Controller extends Node {
 	// Waiting here for contact.
 	public synchronized void start() throws Exception {
 		System.out.println(Arrays.toString(fowardersAddresses));
+		setUpRoutingTable();
 		this.wait();
 	}
 
@@ -61,18 +62,24 @@ public class Controller extends Node {
 		PacketContent content= PacketContent.fromDatagramPacket(packet);
 		int fromNode = content.getNode();
 		String targetDestination = content.getTargetDestination();
+		System.out.println("Flow req recieved from node: " + fromNode + ", for target destination: " + targetDestination);
+
 		RoutingTable r = controllerTable.get(fromNode);
+		//r.printTable();
 		String nextIP = r.getRoute(targetDestination);
 		sendFlowMod(fromNode, nextIP, targetDestination);
 
 	}
 
 	public void sendFlowMod(int toNode, String nextIP, String targetDestination){
+		System.out.println("*sending flow mod packet to node " + toNode + ", with the nextIp: " + nextIP);
+
 		FlowMod f = new FlowMod(targetDestination,nextIP);
 		DatagramPacket packet = f.toDatagramPacket();
-		InetAddress addr;
+		
 		try {
-			addr = InetAddress.getByName(fowardersAddresses[toNode]);
+			System.out.println("Sending flowmod to address: " + fowardersAddresses[toNode]);
+			InetAddress addr = InetAddress.getByName(fowardersAddresses[toNode]);
 			InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
 			packet.setSocketAddress(socket_addr);
 			socket.send(packet);
@@ -84,6 +91,9 @@ public class Controller extends Node {
 
 
 	public void setUpRoutingTable(){
+		System.out.println("* Setting up routing table");
+		controllerTable = new HashMap<>();
+
 		RoutingTable r;
 		controllerTable.put(2,(new RoutingTable()));
 		// node 3
@@ -96,13 +106,10 @@ public class Controller extends Node {
 		controllerTable.put(6,(new RoutingTable()));
 		//node 7
 		r = new RoutingTable();
-		r.setRoute("172.1.0.3", "172.2.0.1");
+		r.setRoute("172.1.0.3", "172.2.0.4");
 		controllerTable.put(7,r);
 	}
 
-	public void populateTable(){
-
-	}
 
 	public static void main(String[] args) {
 		System.out.println("\n\nStarting Controller Node...");

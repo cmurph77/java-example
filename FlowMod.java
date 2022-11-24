@@ -45,6 +45,8 @@ public class FlowMod extends PacketContent {
 			type= FlOW_MOD;
 			targetDestination= oin.readUTF();
 			nextNodeIP= oin.readUTF();
+			nodeID = oin.readInt();
+
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -57,6 +59,7 @@ public class FlowMod extends PacketContent {
 		try {
 			oout.writeUTF(targetDestination);
 			oout.writeUTF(nextNodeIP);
+			oout.writeInt(nodeID);
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}

@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
+import java.util.Stack;
 
 
 
@@ -15,17 +16,20 @@ import java.util.ArrayList;
 public class Fowarder extends Node {
 	static final int DEFAULT_PORT = 54321;
 	static final String FOWARDER_NODE = "Fowarder";
-	String controllerIP = "172.60.0.10";
+	static final String CONTROLLER_IP = "172.60.0.10";
 	String ipAddr;
 	int myNodeID;
 	// String myPublicIP;
 	ArrayList<String> myPublicIPs;
 	RoutingTable routingTable;
+	Stack<DatagramPacket> packetStack = new Stack();
+
+	public Fowarder() {
+	}
 
 	Fowarder(int srcPort, int node) {
 		try {
 			myNodeID = node;
-			//String[] ipAddresses = getConnections.getConnections(myNodeID);
 			myPublicIPs = getConnections.getPublicIPs(myNodeID); 
 			socket = new DatagramSocket(srcPort);
 			routingTable = new RoutingTable(); // initalize a routing table data structure.
@@ -35,17 +39,16 @@ public class Fowarder extends Node {
 	}
 
 	/*
-	 * This method gets called to start up the Fowarder
-	 * Node and send a file request out.
+	 * 
 	 */
 	public synchronized void start() throws Exception {
-		System.out.println("This is node: " + myNodeID);
+		System.out.println("NODE- " + myNodeID + " IS NOW ACTIVE\n");
 		this.wait();
 	}
 
 	
 	public synchronized void onReceipt(DatagramPacket packet) {
-		System.out.println("Packet Recieved");
+		
 		PacketContent content= PacketContent.fromDatagramPacket(packet);
 		// divert incoming packets to their respective handlers
 		switch(content.getType()){
@@ -53,6 +56,8 @@ public class Fowarder extends Node {
 				handleFloMod(packet);
 				break; 
 			case PacketContent.MESSAGE_PACKET:
+			System.out.println("---------------------------------------------------------");
+			System.out.println("MESSAGE PACKET RECIEVED");
 				handleMessagePacket(packet);
 				break;
 			}
@@ -66,22 +71,17 @@ public class Fowarder extends Node {
 		//packetHeader.printHeader();
 		String packetDestinationGateWayIP = packetHeader.destinationGateWayIP;
 		if(packetAtRightNode(packetDestinationGateWayIP)){ //checking if packet is at the right fowarder, if so send to subnet
+			System.out.println("SENDING PACKET TO SUBNET IP:" + packetHeader.destinationSubnetIP);
 			fowardPacket(packet, packetHeader.destinationSubnetIP);
 		}
 		else if(routingTable.routeExists(packetDestinationGateWayIP)){
 			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
 		}
 		else {
-			System.out.println("Sending flow req packet");
+			System.out.println("NO ROUTE FOUND, SENDING FLOW REQUEST TO CONTOLLER");
 			sendFlowReq(packetDestinationGateWayIP);
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} // wait here for flowmod packet to be recieved
-			fowardPacket(packet, routingTable.getRoute(packetDestinationGateWayIP));
-			
-
+			packetStack.add(packet);
+		
 		}
 		
 	}
@@ -92,7 +92,7 @@ public class Fowarder extends Node {
 		DatagramPacket packet = f.toDatagramPacket();
 		InetAddress addr;
 		try {
-			addr = InetAddress.getByName(controllerIP);
+			addr = InetAddress.getByName(CONTROLLER_IP);
 			InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
 			packet.setSocketAddress(socket_addr);
 			socket.send(packet);
@@ -100,12 +100,12 @@ public class Fowarder extends Node {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Flow request sent");
+		System.out.println("FLOW REQUEST SENT");
 	}
 
 	private boolean packetAtRightNode(String ip){
-		for(int i = 0;i<myPublicIPs.size();i++){
-			if(ip == myPublicIPs.get(i)){
+		for(int i = 0; i < myPublicIPs.size();i++){
+			if(ip.equals(myPublicIPs.get(i))){
 				return true;
 			}
 		}
@@ -116,14 +116,16 @@ public class Fowarder extends Node {
 	 * This method handles a flow modification packet.
 	 */
 	private void handleFloMod(DatagramPacket packet) {
-		System.out.println("flowmod recieved");
+		System.out.println("\nFLOW_MOD PACKET RECIEVED, UPDATING ROUTING TABLE.");
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
-		routingTable.setRoute(content.getNextNodeIP(), content.getTargetDestination());		
-		this.notify();
+		routingTable.setRoute(content.getNextNodeIP(), content.getTargetDestination());	
+		handleMessagePacket(packetStack.pop());	
+		//this.notify();
 	}
 
 	public void fowardPacket(DatagramPacket packet,String ip){
-		System.out.println("\n Fowarding packet to IP:" + ipAddr + "\n");
+		System.out.println("FOWARDING PACKET TO IP:" + ip);
+		//System.out.println("---------------------------------------------------------");
 		try{
 			// setting the address
 			InetAddress addr = InetAddress.getByName(ip);

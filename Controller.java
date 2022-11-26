@@ -6,9 +6,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-//import java.net.InetSocketAddress;
-import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -45,11 +42,13 @@ public class Controller extends Node {
 	}
 
 	public synchronized void onReceipt(DatagramPacket packet) {
-		System.out.println("Packet Recieved");
+		//System.out.println("Packet Recieved");
 		PacketContent content= PacketContent.fromDatagramPacket(packet);
 		// divert incoming packets to their respective handlers
 		switch(content.getType()){
 			case PacketContent.FlOW_REQ:
+			System.out.println("\n---------------------------------------------------------");
+
 				handleFlowReq(packet);
 				break; 
 			}
@@ -62,7 +61,7 @@ public class Controller extends Node {
 		PacketContent content= PacketContent.fromDatagramPacket(packet);
 		int fromNode = content.getNode();
 		String targetDestination = content.getTargetDestination();
-		System.out.println("Flow req recieved from node: " + fromNode + ", for target destination: " + targetDestination);
+		System.out.println("FLOW REQUEST RECIEVED FROM NODE: " + fromNode + ", FOR TARGET DESTINATION: " + targetDestination);
 
 		RoutingTable r = controllerTable.get(fromNode);
 		//r.printTable();
@@ -72,13 +71,15 @@ public class Controller extends Node {
 	}
 
 	public void sendFlowMod(int toNode, String nextIP, String targetDestination){
-		System.out.println("*sending flow mod packet to node " + toNode + ", with the nextIp: " + nextIP);
+		System.out.println("SENDING FLOW MOD TO NODE: " + toNode + ",WITH NEXT IP: " + nextIP);
 
 		FlowMod f = new FlowMod(targetDestination,nextIP);
 		DatagramPacket packet = f.toDatagramPacket();
 		
 		try {
-			System.out.println("Sending flowmod to address: " + fowardersAddresses[toNode]);
+			System.out.println("SENDING FLOW MOD TO IP: " + fowardersAddresses[toNode]);
+			System.out.println("---------------------------------------------------------");
+
 			InetAddress addr = InetAddress.getByName(fowardersAddresses[toNode]);
 			InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
 			packet.setSocketAddress(socket_addr);
@@ -91,7 +92,6 @@ public class Controller extends Node {
 
 
 	public void setUpRoutingTable(){
-		System.out.println("* Setting up routing table");
 		controllerTable = new HashMap<>();
 
 		RoutingTable r;
@@ -101,7 +101,9 @@ public class Controller extends Node {
 		r.setRoute("172.2.0.4", "172.2.0.4");
 		controllerTable.put(3,r);
 		//node 4
-		controllerTable.put(4,(new RoutingTable()));
+		r = new RoutingTable();
+		r.setRoute(null, null);
+		controllerTable.put(4,(r));
 		controllerTable.put(5,(new RoutingTable()));
 		controllerTable.put(6,(new RoutingTable()));
 		//node 7
@@ -112,10 +114,9 @@ public class Controller extends Node {
 
 
 	public static void main(String[] args) {
-		System.out.println("\n\nStarting Controller Node...");
+		System.out.println("\n\nSTARTING CONTOLLER NODE...");
 		try {
 			(new Controller(DEFAULT_PORT)).start();
-			System.out.println("Program completed");
 		} catch(java.lang.Exception e) {e.printStackTrace();}
 	}
 

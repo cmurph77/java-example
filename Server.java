@@ -21,14 +21,14 @@ public class Server extends Node {
 
 	// Waiting here for contact.
 	public synchronized void start() throws Exception {
-		
 		this.wait();
 	}
 
 	//@Override
 	public void onReceipt(DatagramPacket packet) {
 		System.out.println("Packet received");
-		this.notify();
+		// TODO PRINT OUT RECIEVED MESSAGE
+		//this.notify();
 	}
 
 

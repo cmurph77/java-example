@@ -18,13 +18,13 @@ public class EndNode extends Node {
 	String myGateWayIp;
 	String mySubnetIP;
 	String testDesGateWayIP = "172.2.0.4"; 
-	String testDesSubnetIP = "181.200.0.1";
+	String testDesSubnetIP = "181.200.0.11";
 
 	EndNode(int srcPort, String mySubnetIP,String myGateWayIp ) {
 		this.myGateWayIp = myGateWayIp;
 		this.mySubnetIP = mySubnetIP;
 		testDesGateWayIP = "172.2.0.4"; 
-		testDesSubnetIP = "181.200.0.1";
+		testDesSubnetIP = "181.200.0.11";
 		try {
 			socket = new DatagramSocket(srcPort);
 			listener.go();

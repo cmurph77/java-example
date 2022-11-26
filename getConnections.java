@@ -48,10 +48,10 @@ public class getConnections {
     public static ArrayList<String> getPublicIPs(int node){
         ArrayList<String> myIPs = new ArrayList<>();
         try (
-            Scanner scanner = new Scanner(connections)) {
+            Scanner scanner = new Scanner(ipAddresses)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                String[] tuple = line.split("=>"); // isolates the node number from its addresses
+                String[] tuple = line.split("->"); // isolates the node number from its addresses
                 int currentNode = Integer.parseInt(tuple[0]);
                 if(currentNode == node){
                     String[] ipAddresses = tuple[1].split(",");

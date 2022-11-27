@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 public class AckPacketContent extends PacketContent {
 
 	String info;
+	Header header;
 
 	/**
 	 * Constructor that takes in information about a file.
@@ -33,8 +34,18 @@ public class AckPacketContent extends PacketContent {
 		try {
 			type= ACKPACKET;
 			info= oin.readUTF();
+			String destinationGateWayIP = oin.readUTF();
+    		String destinationSubnetIP = oin.readUTF();
+			String senderSubNetIP = oin.readUTF();
+    		String senderGatewayIP = oin.readUTF();
+			header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
+    		
 		}
 		catch(Exception e) {e.printStackTrace();}
+	}
+
+	public void setHeader( String senderSubNetIP,String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP){
+		header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
 	}
 
 	/**
@@ -44,6 +55,10 @@ public class AckPacketContent extends PacketContent {
 	protected void toObjectOutputStream(ObjectOutputStream oout) {
 		try {
 			oout.writeUTF(info);
+			oout.writeUTF(header.getDestinationGateWayIP());
+			oout.writeUTF(header.getDestinationSubnetIP());
+			oout.writeUTF(header.getSenderSubNetIP());
+			oout.writeUTF(header.getSenderGatewayIP());
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -70,7 +85,7 @@ public class AckPacketContent extends PacketContent {
 
 	@Override
 	public Header getHeader() {
-		return null;
+		return header;
 	}
 
 	@Override

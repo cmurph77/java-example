@@ -93,20 +93,30 @@ public class Controller extends Node {
 
 	public void setUpRoutingTable(){
 		controllerTable = new HashMap<>();
-
+		// TODO write algorithm to find route
 		RoutingTable r;
+
+		// node 2
 		controllerTable.put(2,(new RoutingTable()));
+		
 		// node 3
 		r = new RoutingTable();
 		r.setRoute("172.2.0.4", "172.2.0.4");
+		r.setRoute("172.1.0.7", "172.1.0.7");
 		controllerTable.put(3,r);
+		
 		//node 4
 		r = new RoutingTable();
-		r.setRoute(null, null);
+		r.setRoute("172.2.0.3", "172.1.0.7");
 		controllerTable.put(4,(r));
+		
+		// node5
 		controllerTable.put(5,(new RoutingTable()));
+		
+		// node 6
 		controllerTable.put(6,(new RoutingTable()));
-		//node 7
+		
+		// node 7
 		r = new RoutingTable();
 		r.setRoute("172.1.0.3", "172.2.0.4");
 		controllerTable.put(7,r);

@@ -4,6 +4,7 @@
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
+import java.util.Scanner;
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -36,15 +37,22 @@ public class EndNode extends Node {
 	 * This method gets called to start up the EndNode Node and send a file request out.
 	 */
 	public synchronized void start() throws Exception {
-		sendMessagePacket(myGateWayIp);
-		//this.wait();
+		Scanner s = new Scanner(System.in);
+		boolean run = true;
+		System.out.println("ENTER MESSAGE TO SEND: ");
+		if(s.hasNext()){
+				String message = s.nextLine();
+				if(message.equals("quit")) run = false;
+				sendMessagePacket(message,myGateWayIp);
+
+		}
+		this.wait();
 	}
 
 	// sends a specific message packet
 	public void sendMessagePacket(String messageToSend,String ip) throws IOException{
 		messagePacket m = new messagePacket(messageToSend);
 		m.setHeader(mySubnetIP, myGateWayIp, testDesGateWayIP, testDesSubnetIP);
-		m.getHeader().printHeader();
 		DatagramPacket packet = m.toDatagramPacket();
 		// setting the address
 		InetAddress addr = InetAddress.getByName(ip);
@@ -54,7 +62,7 @@ public class EndNode extends Node {
 	}
 
 	// sends a generic message packet
-	public void sendMessagePacket(String ip) throws IOException{
+	public void sendMessagePacket(String ip) throws IOException {
 		messagePacket m = new messagePacket("Hello from EndNode with ip address:  " + mySubnetIP);
 		m.setHeader(mySubnetIP, myGateWayIp, testDesGateWayIP, testDesSubnetIP);
 		//m.getHeader().printHeader();
@@ -77,7 +85,11 @@ public class EndNode extends Node {
 			case PacketContent.MESSAGE_PACKET:
 				handleMessagePacket(packet);
 				break;
+			case PacketContent.ACKPACKET:
+				System.out.println("ACK RECIEVED");
+				break;
 			}
+			
 
 		this.notify();
 	}

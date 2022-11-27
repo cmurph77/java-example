@@ -93,7 +93,7 @@ public class Controller extends Node {
 
 	public void setUpRoutingTable(){
 		controllerTable = new HashMap<>();
-
+		// TODO write algorithm to find route
 		RoutingTable r;
 		controllerTable.put(2,(new RoutingTable()));
 		// node 3

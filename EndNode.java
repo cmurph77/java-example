@@ -4,6 +4,7 @@
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
+import java.util.Scanner;
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -36,7 +37,18 @@ public class EndNode extends Node {
 	 * This method gets called to start up the EndNode Node and send a file request out.
 	 */
 	public synchronized void start() throws Exception {
-		sendMessagePacket(myGateWayIp);
+		Scanner s = new Scanner(System.in);
+		boolean run = true;
+		System.out.println("ENTER MESSAGE TO SEND: ");
+		while(run){
+			if(s.hasNext()){
+				String message = s.nextLine();
+				if(message.equals("quit")) run = false;
+				sendMessagePacket(message,myGateWayIp);
+
+			}
+
+		}
 		//this.wait();
 	}
 
@@ -44,7 +56,6 @@ public class EndNode extends Node {
 	public void sendMessagePacket(String messageToSend,String ip) throws IOException{
 		messagePacket m = new messagePacket(messageToSend);
 		m.setHeader(mySubnetIP, myGateWayIp, testDesGateWayIP, testDesSubnetIP);
-		m.getHeader().printHeader();
 		DatagramPacket packet = m.toDatagramPacket();
 		// setting the address
 		InetAddress addr = InetAddress.getByName(ip);

@@ -27,8 +27,15 @@ public class Server extends Node {
 	//@Override
 	public void onReceipt(DatagramPacket packet) {
 		System.out.println("Packet received");
-		// TODO PRINT OUT RECIEVED MESSAGE
+		printMessage(packet);
 		//this.notify();
+	}
+
+	public void printMessage(DatagramPacket packet){
+		PacketContent p = PacketContent.fromDatagramPacket(packet);
+		String message = p.toString();
+		System.out.println("MESSAGE RECIEVED: " + message);
+
 	}
 
 

@@ -56,16 +56,20 @@ public class Fowarder extends Node {
 				handleFloMod(packet);
 				break; 
 			case PacketContent.MESSAGE_PACKET:
-			System.out.println("---------------------------------------------------------");
-			System.out.println("MESSAGE PACKET RECIEVED");
-				handleMessagePacket(packet);
+				System.out.println("---------------------------------------------------------");
+				System.out.println("MESSAGE PACKET RECIEVED");
+				handlePacketFowarding(packet);
 				break;
+			case PacketContent.ACKPACKET:
+				System.out.println("---------------------------------------------------------");
+				System.out.println("ACK PACKET RECIEVED");
+				handlePacketFowarding(packet);
 			}
 
 		//this.notify();
 	}
 
-	private void handleMessagePacket(DatagramPacket packet) {
+	private void handlePacketFowarding(DatagramPacket packet) {
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
 		Header packetHeader = content.getHeader();
 		//packetHeader.printHeader();
@@ -119,7 +123,7 @@ public class Fowarder extends Node {
 		System.out.println("\nFLOW_MOD PACKET RECIEVED, UPDATING ROUTING TABLE.");
 		PacketContent content = PacketContent.fromDatagramPacket(packet);
 		routingTable.setRoute(content.getNextNodeIP(), content.getTargetDestination());	
-		handleMessagePacket(packetStack.pop());	
+		handlePacketFowarding(packetStack.pop());	
 		//this.notify();
 	}
 

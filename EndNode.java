@@ -37,7 +37,6 @@ public class EndNode extends Node {
 	 * This method gets called to start up the EndNode Node and send a file request out.
 	 */
 	public synchronized void start() throws Exception {
-		//sendMessagePacket("test message", myGateWayIp);
 		Scanner s = new Scanner(System.in);
 		boolean run = true;
 		System.out.println("ENTER MESSAGE TO SEND: ");

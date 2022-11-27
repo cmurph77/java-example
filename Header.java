@@ -47,10 +47,10 @@ public class Header {
     }
 
     public void printHeader(){
-        System.out.println("senderSubnetIP: " + senderSubNetIP);
-        System.out.println("senderGateWayIP: " + senderGatewayIP);
-        System.out.println("destinationGateWayIP: "+ destinationGateWayIP);
-        System.out.println("destinationSubNetIP: "+ destinationSubnetIP);
+        System.out.println(" - senderSubnetIP: " + senderSubNetIP);
+        System.out.println(" - senderGateWayIP: " + senderGatewayIP);
+        System.out.println(" - destinationGateWayIP: "+ destinationGateWayIP);
+        System.out.println(" - destinationSubNetIP: "+ destinationSubnetIP);
     }
 
 

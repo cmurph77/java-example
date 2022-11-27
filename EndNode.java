@@ -40,16 +40,13 @@ public class EndNode extends Node {
 		Scanner s = new Scanner(System.in);
 		boolean run = true;
 		System.out.println("ENTER MESSAGE TO SEND: ");
-		while(run){
-			if(s.hasNext()){
+		if(s.hasNext()){
 				String message = s.nextLine();
 				if(message.equals("quit")) run = false;
 				sendMessagePacket(message,myGateWayIp);
 
-			}
-
 		}
-		//this.wait();
+		this.wait();
 	}
 
 	// sends a specific message packet
@@ -65,7 +62,7 @@ public class EndNode extends Node {
 	}
 
 	// sends a generic message packet
-	public void sendMessagePacket(String ip) throws IOException{
+	public void sendMessagePacket(String ip) throws IOException {
 		messagePacket m = new messagePacket("Hello from EndNode with ip address:  " + mySubnetIP);
 		m.setHeader(mySubnetIP, myGateWayIp, testDesGateWayIP, testDesSubnetIP);
 		//m.getHeader().printHeader();
@@ -88,7 +85,11 @@ public class EndNode extends Node {
 			case PacketContent.MESSAGE_PACKET:
 				handleMessagePacket(packet);
 				break;
+			case PacketContent.ACKPACKET:
+				System.out.println("ACK RECIEVED");
+				break;
 			}
+			
 
 		this.notify();
 	}

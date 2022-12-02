@@ -67,20 +67,6 @@ public class Server extends Node {
 		System.out.println("ACK PACKET SENT");
 	}
 
-	// public void sendACKPacket(){
-	// 	AckPacketContent ack = new AckPacketContent("ACK"); //TODO add more parameters to ack packet
-	// 	ack.setHeader(mySubnetIP,myGateWayIp,testDesGateWayIP,testDesSubnetIP);
-	// 	System.out.println("SENDING ACK PACKET T0: " + myGateWayIp);
-	// 	try{
-	// 		InetAddress addr = InetAddress.getByName(myGateWayIp);
-	// 		InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
-	// 		packet.setSocketAddress(socket_addr);
-	// 		socket.send(packet);
-	// 	}catch(IOException e){
-	// 		e.printStackTrace();
-	// 	}
-	// 	System.out.println("ACK PACKET SENT");
-	// }
 
 	public void printMessage(DatagramPacket packet){
 		PacketContent p = PacketContent.fromDatagramPacket(packet);

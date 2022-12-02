@@ -21,6 +21,10 @@
     "Header.class": true,
     "script.sh": true,
     "startup.sh": true,
-    "User.class": true
+    "User.class": true,
+    "messagePacket.class": true,
+    "RoutingTable.class": true,
+    "EndNode.class": true,
+    "FlowReq.class": true
   }
 }

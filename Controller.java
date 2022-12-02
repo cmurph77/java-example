@@ -93,32 +93,61 @@ public class Controller extends Node {
 
 	public void setUpRoutingTable(){
 		controllerTable = new HashMap<>();
-		// TODO write algorithm to find route
 		RoutingTable r;
 
-		// node 2
-		controllerTable.put(2,(new RoutingTable()));
+		// NODE 2 ROUTES
+		r = new RoutingTable();
+		r.setRoute("172.1.0.3", "172.1.0.3"); // node 3
+		r.setRoute("172.1.0.3", "172.2.0.4"); // node 4
+		r.setRoute("172.4.0.5", "172.4.0.5"); // node 5
+		r.setRoute("172.1.0.7", "172.1.0.7"); // node 7
+		r.setRoute("172.1.0.3", "172.3.0.6"); // node 6
+		controllerTable.put(2,r);
 		
 		// node 3
 		r = new RoutingTable();
-		r.setRoute("172.2.0.4", "172.2.0.4");
-		r.setRoute("172.1.0.7", "172.1.0.7");
+		r.setRoute("172.1.0.2", "172.1.0.2"); // node2
+		r.setRoute("172.2.0.4", "172.2.0.4"); // node 4
+		r.setRoute("172.1.0.2", "172.4.0.5"); // node 5
+		r.setRoute("172.2.0.6", "172.3.0.6"); // node 6	
+		r.setRoute("172.1.0.7", "172.1.0.7"); // node 7
 		controllerTable.put(3,r);
 		
 		//node 4
 		r = new RoutingTable();
-		r.setRoute("172.2.0.3", "172.1.0.7");
+		r.setRoute("172.1.0.3", "172.1.0.2"); // node2
+		r.setRoute("172.1.0.3", "172.1.0.3"); // node 3
+		r.setRoute("172.2.0.6", "172.4.0.5"); // node 5
+		r.setRoute("172.2.0.6", "172.2.0.6"); // node 6
+		r.setRoute("172.2.0.3", "172.1.0.7"); // node 7
 		controllerTable.put(4,(r));
 		
 		// node5
-		controllerTable.put(5,(new RoutingTable()));
+		r = new RoutingTable();
+		r.setRoute("172.4.0.2", "172.1.0.2"); // node2
+		r.setRoute("172.3.0.6", "172.1.0.3");
+		r.setRoute("172.3.0.6", "172.2.0.3");
+		r.setRoute("172.3.0.6", "172.2.0.4"); // node 4
+		r.setRoute("172.4.0.2", "172.1.0.7"); // node 7
+		r.setRoute("172.3.0.6", "172.3.0.6"); // node 6
+		controllerTable.put(5,r);
 		
 		// node 6
-		controllerTable.put(6,(new RoutingTable()));
+		r = new RoutingTable();
+		r.setRoute("172.2.0.3", "172.1.0.2"); // node2
+		r.setRoute("172.2.0.3", "172.1.0.3"); //node 3
+		r.setRoute("172.2.0.4", "172.2.0.4"); // node 4
+		r.setRoute("172.3.0.5", "172.4.0.5"); // node 5
+		r.setRoute("172.2.0.3", "172.1.0.7"); // node 7
+		controllerTable.put(6,r);
 		
 		// node 7
 		r = new RoutingTable();
-		r.setRoute("172.1.0.3", "172.2.0.4");
+		r.setRoute("172.1.0.2", "172.1.0.2"); // node2
+		r.setRoute("172.1.0.3", "172.1.0.3"); //node 3
+		r.setRoute("172.1.0.3", "172.2.0.4"); // node 4
+		r.setRoute("172.1.0.2", "172.4.0.5"); // node 5
+		r.setRoute("172.1.0.3", "172.3.0.6"); // node 6
 		controllerTable.put(7,r);
 	}
 

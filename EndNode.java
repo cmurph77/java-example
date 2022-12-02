@@ -38,12 +38,10 @@ public class EndNode extends Node {
 	 */
 	public synchronized void start() throws Exception {
 		Scanner s = new Scanner(System.in);
-		boolean run = true;
 		System.out.println("ENTER MESSAGE TO SEND: ");
 		if(s.hasNext()){
 				String message = s.nextLine();
-				if(message.equals("quit")) run = false;
-				sendMessagePacket(message,myGateWayIp);
+	            sendMessagePacket(message,myGateWayIp);
 
 		}
 		this.wait();

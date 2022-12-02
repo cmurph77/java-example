@@ -1,5 +1,7 @@
 import java.util.ArrayList;
-
+/*
+ * This class represents a packet header which is  
+ */
 public class Header {
     
     ArrayList<Integer> nodesOnRoute;
@@ -39,7 +41,7 @@ public class Header {
 
 
     // this is a header for a message packet
-    public Header(String senderSubNetIP, String senderGatewayIP, String destinationGateWayIP,String destinationSubnetIP) {
+    public Header(String senderSubNetIP, String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP) {
         this.senderSubNetIP = senderSubNetIP;
         this.senderGatewayIP = senderGatewayIP;
         this.destinationGateWayIP = destinationGateWayIP;

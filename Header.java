@@ -11,6 +11,7 @@ public class Header {
     String destinationGateWayIP;
     String destinationSubnetIP;
 
+    String ACK_GatewayIP;
 
     public String getSenderSubNetIP() {
         return senderSubNetIP;

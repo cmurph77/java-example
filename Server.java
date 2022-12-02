@@ -12,14 +12,13 @@ import java.net.InetSocketAddress;
 public class Server extends Node {
 	static final int DEFAULT_PORT = 54321;
 	static final String SERVER_NODE = "user";
-	String myGateWayIp = "181.200.0.4";  // TODO SET THESE PROPERLY
+	String myGateWayIp = "181.200.0.4";  
 	String mySubnetIP = "181.200.0.11";
 	String testDesGateWayIP = "172.1.0.7"; 
 	String testDesSubnetIP = "192.168.17.1";
 
 	Server(int srcPort) {
 		try {
-			// TODO set gateway and subnet ip from start
 
 			socket = new DatagramSocket(srcPort);
 			listener.go();
@@ -51,7 +50,7 @@ public class Server extends Node {
 		PacketContent content= PacketContent.fromDatagramPacket(recievedPacket);
 		Header senderHeader = content.getHeader();
 		mySubnetIP = senderHeader.getDestinationSubnetIP();
-		AckPacketContent ack = new AckPacketContent("ACK"); //TODO add more parameters to ack packet
+		AckPacketContent ack = new AckPacketContent("ACK"); 
 		ack.setHeader(mySubnetIP,myGateWayIp,testDesGateWayIP,testDesSubnetIP);
 		DatagramPacket packet = ack.toDatagramPacket();
 		System.out.println("SENDING ACK PACKET T0: " + myGateWayIp);

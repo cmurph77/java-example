@@ -42,7 +42,10 @@ public class EndNode extends Node {
 	 */
 	public synchronized void start() throws Exception {
 		Scanner s = new Scanner(System.in);
-		System.out.println("Enter the destination gateway IP address");
+		System.out.println("Woudld you like to receive or send messages? Y/N?");
+		String result = s.nextLine();
+		if(result.equals("Y")){
+			System.out.println("Enter the destination gateway IP address");
 		destinationGateWayIP = s.nextLine();
 		System.out.println("enter destination subnet ip");
 		destinationSubnetIP = s.nextLine();
@@ -51,6 +54,7 @@ public class EndNode extends Node {
 				String message = s.nextLine();
 	            sendMessagePacket(message,gateWayIP);
 
+		}
 		}
 		this.wait();
 	}

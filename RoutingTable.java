@@ -1,5 +1,9 @@
 import java.util.HashMap;
-
+/**
+ * @author cianmurphy
+ *  
+ * Routing table data type that stores data about routing packets
+ */
 public class RoutingTable {
     static final int NODE_COUNT = 6;
     HashMap<String,String> table;

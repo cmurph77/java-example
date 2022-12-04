@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 public class messagePacket extends PacketContent {
 
 	String message;
-	Header header;
+	Header header; // packet header
 
 	/**
 	 * Constructor that takes in information about a file.
@@ -20,6 +20,14 @@ public class messagePacket extends PacketContent {
 		type= MESSAGE_PACKET;
 	}
 
+	/**
+	 * This method sets the header for the message packet
+	 * 
+	 * @param senderSubNetIP
+	 * @param senderGatewayIP
+	 * @param destinationGateWayIP
+	 * @param destinationSubnetIP
+	 */
 	public void setHeader( String senderSubNetIP,String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP){
 		header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
 	}
@@ -72,29 +80,33 @@ public class messagePacket extends PacketContent {
 	}
 
 	/**
-	 * Returns the file name contained in the packet.
+	 * 
 	 *
-	 * @return Returns the file name contained in the packet.
+	 * @return Returns the messagge contained in the packet.
 	 */
 	public String getmessage() {
 		return message;
 	}
 
+	// returns the message header
 	@Override
 	public Header getHeader() {
 		return header;
 	}
 
+	// No needed for this packet type
 	@Override
 	public String getTargetDestination() {
 		return null;
 	}
 
+	// No needed for this packet type
 	@Override
 	public int getNode() {
 		return 0;
 	}
 
+	// No needed for this packet type
 	@Override
 	public String getNextNodeIP() {
 		return null;

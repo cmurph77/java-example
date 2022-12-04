@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class Controller extends Node {
 	static final int DEFAULT_PORT = 54321;
-    String[] fowardersAddresses = {
+    String[] fowardersAddresses = {    // addresses for all the fowarder nodes on the netowrk.
         "null",
         "null",
         "172.60.0.2", // node 2
@@ -36,13 +36,11 @@ public class Controller extends Node {
 
 	// Waiting here for contact.
 	public synchronized void start() throws Exception {
-		//System.out.println(Arrays.toString(fowardersAddresses));
-		setUpRoutingTable();
+		setUpRoutingTable();  
 		this.wait();
 	}
 
 	public synchronized void onReceipt(DatagramPacket packet) {
-		//System.out.println("Packet Recieved");
 		PacketContent content= PacketContent.fromDatagramPacket(packet);
 		// divert incoming packets to their respective handlers
 		switch(content.getType()){
@@ -57,30 +55,42 @@ public class Controller extends Node {
 	}
 
 
+
+	/**
+	 * This method looks up controller table and sends back a flow mod packet to the controller who send the flow request
+	 * 
+	 * @param packet
+	 */
 	private void handleFlowReq(DatagramPacket packet) {
 		PacketContent content= PacketContent.fromDatagramPacket(packet);
-		int fromNode = content.getNode();
-		String targetDestination = content.getTargetDestination();
+		int fromNode = content.getNode(); 								// get the NODE ID of the fowarder that send flowrequest
+		String targetDestination = content.getTargetDestination();      // get the destination IP the fowarder node is looking for a route to
 		System.out.println("FLOW REQUEST RECIEVED FROM NODE: " + fromNode + ", FOR TARGET DESTINATION: " + targetDestination);
-
-		RoutingTable r = controllerTable.get(fromNode);
-		//r.printTable();
-		String nextIP = r.getRoute(targetDestination);
-		sendFlowMod(fromNode, nextIP, targetDestination);
+		RoutingTable r = controllerTable.get(fromNode);                // get specific routing table for the node
+		String nextIP = r.getRoute(targetDestination);                 // find the ip for the next node that packet should be fowarded to
+		sendFlowMod(fromNode, nextIP, targetDestination);              // send a flow mode packet to the fowarder
 
 	}
 
+
+	/**
+	 * This method sends a flow mod packet for a fowarder to update its routing table
+	 * 
+	 * @param toNode The node to send the flowmod to.
+	 * @param nextIP The next ip address for fowarder to send the packet to 
+	 * @param targetDestination the targer destination the packet want to to get to.
+	 */
 	public void sendFlowMod(int toNode, String nextIP, String targetDestination){
 		System.out.println("SENDING FLOW MOD TO NODE: " + toNode + ",WITH NEXT IP: " + nextIP);
 
-		FlowMod f = new FlowMod(targetDestination,nextIP);
+		FlowMod f = new FlowMod(targetDestination,nextIP); 			// create flow mod packet
 		DatagramPacket packet = f.toDatagramPacket();
 		
 		try {
 			System.out.println("SENDING FLOW MOD TO IP: " + fowardersAddresses[toNode]);
 			System.out.println("---------------------------------------------------------");
 
-			InetAddress addr = InetAddress.getByName(fowardersAddresses[toNode]);
+			InetAddress addr = InetAddress.getByName(fowardersAddresses[toNode]);  // send to fowardes address that is stored by the controller in an array
 			InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_PORT);
 			packet.setSocketAddress(socket_addr);
 			socket.send(packet);
@@ -91,6 +101,9 @@ public class Controller extends Node {
 	}
 
 
+	/**
+	 * This method sets up the routing table for the controller. the fowarding data is hardcoded in. 
+	 */
 	public void setUpRoutingTable(){
 		controllerTable = new HashMap<>();
 		RoutingTable r;

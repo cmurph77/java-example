@@ -71,7 +71,6 @@ public class EndNode extends Node {
 	public void sendMessagePacket(String messageToSend,String ip) throws IOException{
 		messagePacket m = new messagePacket(messageToSend);
 		m.setHeader(mySubnetIP, myGatewayIP, destinationGateWayIP, destinationSubnetIP); // A header is created with the destination Ip addresses provided
-		m.getHeader().printHeader();
 		DatagramPacket packet = m.toDatagramPacket();
 		InetAddress addr = InetAddress.getByName(ip);
 		InetSocketAddress socket_addr = new InetSocketAddress(addr, DEFAULT_SRC_PORT);
@@ -83,7 +82,6 @@ public class EndNode extends Node {
 	 * This method sends an ack packet to the sender of the datagram packet it has revieved
 	 * 
 	 * @param recievedPacket the packet thats been recieved for which the acknowledgment is being sent.
-	 * 
 	 * 
 	 */
 	public void sendACKPacket(DatagramPacket recievedPacket){

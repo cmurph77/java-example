@@ -18,8 +18,7 @@ public class AckPacketContent extends PacketContent {
 
 	/**
 	 * Constructor that takes in information about a file.
-	 * @param filename Initial filename.
-	 * @param size Size of filename.
+	 * @param info this is a mesage that can be encoded into the ack packet
 	 */
 	AckPacketContent(String info) {
 		type= ACKPACKET;
@@ -34,16 +33,26 @@ public class AckPacketContent extends PacketContent {
 		try {
 			type= ACKPACKET;
 			info= oin.readUTF();
-			String destinationGateWayIP = oin.readUTF();
+			String destinationGateWayIP = oin.readUTF(); // read all the ip address 
     		String destinationSubnetIP = oin.readUTF();
 			String senderSubNetIP = oin.readUTF();
     		String senderGatewayIP = oin.readUTF();
-			header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
+			header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP); // contstruct a header from the object input stream
     		
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
 
+
+
+	/**
+	 * this method sets the header for the packet
+	 * 
+	 * @param senderSubNetIP
+	 * @param senderGatewayIP
+	 * @param destinationGateWayIP
+	 * @param destinationSubnetIP
+	 */
 	public void setHeader( String senderSubNetIP,String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP){
 		header = new Header(senderSubNetIP, senderGatewayIP, destinationGateWayIP, destinationSubnetIP);
 	}
@@ -55,7 +64,7 @@ public class AckPacketContent extends PacketContent {
 	protected void toObjectOutputStream(ObjectOutputStream oout) {
 		try {
 			oout.writeUTF(info);
-			oout.writeUTF(header.getDestinationGateWayIP());
+			oout.writeUTF(header.getDestinationGateWayIP()); // we have to write all the difference components of the header seperatley
 			oout.writeUTF(header.getDestinationSubnetIP());
 			oout.writeUTF(header.getSenderSubNetIP());
 			oout.writeUTF(header.getSenderGatewayIP());

@@ -25,6 +25,7 @@
     "messagePacket.class": true,
     "RoutingTable.class": true,
     "EndNode.class": true,
-    "FlowReq.class": true
+    "FlowReq.class": true,
+    "FlowMod.class": true
   }
 }

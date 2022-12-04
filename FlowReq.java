@@ -10,13 +10,15 @@ import java.io.ObjectOutputStream;
 public class FlowReq extends PacketContent {
 
 	String targetDestination;    // this is the destination for the packet\
-	int node;
+	int node;                    // the node ID of the fowarder thats sending the packet
 
 
+	// returns the target destination that the flow request is for
 	public String getTargetDestination() {
 		return targetDestination;
 	}
 
+	// constructs a flow request packet
 	public FlowReq(String targetDestination, int node) {
 		this.targetDestination = targetDestination;
 		this.node = node;
@@ -53,16 +55,19 @@ public class FlowReq extends PacketContent {
 		return targetDestination;
 	}
 
+	// method not implemented
 	@Override
 	public Header getHeader() {
 		return null;
 	}
 
+	// returns the node id of the fowarding sending the packet
 	@Override
 	public int getNode() {
 		return node;
 	}
 
+	// method not implemented
 	@Override
 	public String getNextNodeIP() {
 		return null;

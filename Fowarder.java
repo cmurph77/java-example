@@ -4,9 +4,12 @@
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Stack;
 
 
@@ -31,7 +34,7 @@ public class Fowarder extends Node {
 	Fowarder(int srcPort, int node) {
 		try {
 			myNodeID = node;
-			myPublicIPs = getConnections.getPublicIPs(myNodeID); // an array of all the public ips for this node
+			myPublicIPs = getPublicIPs(myNodeID); // an array of all the public ips for this node
 			socket = new DatagramSocket(srcPort);
 			routingTable = new RoutingTable(); // initalize a routing table data structure.
 			listener.go();
@@ -165,7 +168,32 @@ public class Fowarder extends Node {
 		}
 		catch(java.lang.Exception e){e.printStackTrace();}
 	}
-	
+
+	/*
+	 * This method reads the nodeIpAddresses and returns all the publiv ip addresses associated with the node.
+	 */
+	public static ArrayList<String> getPublicIPs(int node){
+		File fileIpAddresses = new File("nodeIpAddresses.txt");
+		 ArrayList<String> myIPs = new ArrayList<>();
+		 try (
+			 Scanner scanner = new Scanner(fileIpAddresses)) {
+			 while (scanner.hasNextLine()) {
+				 String line = scanner.nextLine();
+				 String[] tuple = line.split("->"); // isolates the node number from its addresses
+				 int currentNode = Integer.parseInt(tuple[0]);
+				 if(currentNode == node){
+					 String[] ipAddresses = tuple[1].split(",");
+					 for(int i = 0;i< ipAddresses.length;i++){
+						 myIPs.add(ipAddresses[i]);
+					 }
+				 }
+			 }
+ 
+		 } catch (FileNotFoundException e) {
+			 e.printStackTrace();
+		 }
+		 return myIPs;
+	 }
 	
 
 

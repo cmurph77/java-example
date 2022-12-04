@@ -11,7 +11,7 @@ public class FlowMod extends PacketContent {
 
 	String targetDestination;    // this is the destination for the packet
 	String nextNodeIP;           // this is the next ip address the fowarder must foward to.
-	int nodeID;
+	int nodeID;                 // the nodeID that the packet is being sent to
 	
 
 	public int getNodeID() {

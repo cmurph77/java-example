@@ -1,15 +1,17 @@
 import java.util.ArrayList;
-/*
- * This class represents a packet header which is  
+/**
+ * This class represents a packet header 
+ * 
+ * @author cianmurphy
  */
+
 public class Header {
     
     ArrayList<Integer> nodesOnRoute;
-    // messagepacket header
-    String senderSubNetIP;
-    String senderGatewayIP;
+    String senderSubNetIP; 
+    String senderGatewayIP;  // this is the ip address of the local fowarder on the nodes netword
     String destinationGateWayIP;
-    String destinationSubnetIP;
+    String destinationSubnetIP; // this isthe ip for the fowarder on the destination nodes netowrk
 
     String ACK_GatewayIP;
 
@@ -41,7 +43,7 @@ public class Header {
 
 
 
-    // this is a header for a message packet
+    // creates a header
     public Header(String senderSubNetIP, String senderGatewayIP,String destinationGateWayIP,String destinationSubnetIP) {
         this.senderSubNetIP = senderSubNetIP;
         this.senderGatewayIP = senderGatewayIP;
@@ -49,6 +51,9 @@ public class Header {
         this.destinationSubnetIP = destinationSubnetIP;
     }
 
+    /**
+     * This method prints out the header, Mainly used for debugging purposes
+     */
     public void printHeader(){
         System.out.println(" - senderSubnetIP: " + senderSubNetIP);
         System.out.println(" - senderGateWayIP: " + senderGatewayIP);
